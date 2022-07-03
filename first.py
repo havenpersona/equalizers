@@ -64,21 +64,26 @@ class FirstAllPass():
         
 
 class FirstLowShelving():
-    def __init__(self, fc, fs, g, boost = True):
+    def __init__(self, fc, fs, g, boost):
         self.fc = fc
         self.fs = fs
         self.g = g
-        self.v_zero = math.pow(10, self.g/20)
         self.boost = boost
-        
-    def calc_alpha(self, boost = True):
-        if boost:
+    
+    def get_v_zero(self):
+        if self.boost:
+            return math.pow(10, self.g/20)
+        else:
+            return math.pow(10, -self.g/20)
+    
+    def calc_alpha(self):
+        if self.boost:
             return (math.tan((math.pi * self.fc) / self.fs) - 1) / (math.tan((math.pi * self.fc) / self.fs) + 1)
         else:
-            return(math.tan((math.pi * self.fc) / self.fs) - self.v_zero) / (math.tan((math.pi * self.fc) / self.fs) + self.v_zero)
+            return (math.tan((math.pi * self.fc) / self.fs) - self.get_v_zero()) / (math.tan((math.pi * self.fc) / self.fs) + self.get_v_zero())
     
     def calc_h_zero(self):
-        return self.v_zero - 1
+        return self.get_v_zero() - 1
     
     def get_num_den(self):
         alpha = self.calc_alpha()
@@ -95,7 +100,6 @@ class FirstLowShelving():
         w, h = signal.freqz(num, den, fs = self.fs)
         return w, h
     
-
     def plot_response(self):
         w, h = self.get_response()
         fig, ax = plt.subplots(nrows=2, sharex=True, figsize=(10, 10))
@@ -126,17 +130,21 @@ class FirstHighShelving():
         self.fc = fc
         self.fs = fs
         self.g = g
-        self.v_zero = math.pow(10, self.g/20)
         self.boost = boost
-        
-    def calc_alpha(self, boost = True):
-        if boost:
+    
+    def get_v_zero(self):
+        if self.boost:
+            return math.pow(10, self.g/20)
+        else:
+            return math.pow(10, -self.g/20)
+    def calc_alpha(self):
+        if self.boost:
             return (math.tan((math.pi * self.fc) / self.fs) - 1) / (math.tan((math.pi * self.fc) / self.fs) + 1)
         else:
-            return self.v_zero * (math.tan((math.pi * self.fc) / self.fs) - 1) / (self.v_zero * math.tan((math.pi * self.fc) / self.fs) + 1)
+            return self.get_v_zero() * (math.tan((math.pi * self.fc) / self.fs) - 1) / (self.get_v_zero() * math.tan((math.pi * self.fc) / self.fs) + 1)
     
     def calc_h_zero(self):
-        return self.v_zero - 1
+        return self.get_v_zero() - 1
     
     def get_num_den(self):
         alpha = self.calc_alpha()
@@ -153,18 +161,17 @@ class FirstHighShelving():
         w, h = signal.freqz(num, den, fs = self.fs)
         return w, h
     
-
     def plot_response(self):
         w, h = self.get_response()
         fig, ax = plt.subplots(nrows=2, sharex=True, figsize=(10, 10))
         ax[0].plot(w, np.abs(h))
         ax[0].grid(True)
-        ax[0].set_title('First Order High Shelving Magnitude Response')
+        ax[0].set_title('First Order High Magnitude Response')
         ax[0].set_xlabel('Frequency')
         
         ax[1].plot(w, np.unwrap(np.angle(h)))
         ax[1].grid(True)
-        ax[1].set_title('First Order High Shelving Phase Response')
+        ax[1].set_title('First Order High Phase Response')
         ax[1].set_xlabel('Frequency')
            
     def apply_effect(self, waveform):
@@ -176,4 +183,4 @@ class FirstHighShelving():
     def play_audio(self, waveform):
         result = self.apply_effect(waveform)
         ipd.Audio(result, rate=self.fs)
-        
+
