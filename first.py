@@ -52,7 +52,7 @@ class FirstAllPass():
         ax[0].grid(True)
         ax[0].set_title('First Order All Pass Magnitude Response')
         ax[0].set_xlabel('Frequency')
-        
+        ax[0].set_ylim([0, 3])
         ax[1].plot(w, np.unwrap(np.angle(h)))
         ax[1].grid(True)
         ax[1].set_title('First Order All Pass Phase Response')
@@ -107,7 +107,7 @@ class FirstLowShelving():
         ax[0].grid(True)
         ax[0].set_title('First Order Low Shelving Magnitude Response')
         ax[0].set_xlabel('Frequency')
-        
+        ax[0].set_ylim([0, 3])
         ax[1].plot(w, np.unwrap(np.angle(h)))
         ax[1].grid(True)
         ax[1].set_title('First Order Low Shelving Phase Response')
@@ -168,7 +168,7 @@ class FirstHighShelving():
         ax[0].grid(True)
         ax[0].set_title('First Order High Magnitude Response')
         ax[0].set_xlabel('Frequency')
-        
+        ax[0].set_ylim([0, 3])
         ax[1].plot(w, np.unwrap(np.angle(h)))
         ax[1].grid(True)
         ax[1].set_title('First Order High Phase Response')

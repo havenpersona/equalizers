@@ -30,8 +30,8 @@ class SecondLowShelving():
             a1 = 2*(math.pow(k, 2) - 1) / (1 + math.sqrt(2)*k + math.pow(k, 2))
             a2 = (1 - math.sqrt(2)*k + math.pow(k, 2)) / (1 + math.sqrt(2)*k + math.pow(k, 2))
         else:
-            a1 = 2*(v*math.pow(k, 2) - 1) / (1 + math.sqrt(2 * v) * k + v*math.pow(k, 2))
-            a2 = (1 - math.sqrt(2*v)*k + v*math.pow(k, 2)) / (1 + math.sqrt(2*v)*k + v*math.pow(k, 2))
+            a1 = 2*(math.pow(k, 2) - v) / (v + math.sqrt(2 * v) * k + math.pow(k, 2))
+            a2 = (v - math.sqrt(2*v)*k + math.pow(k, 2)) / (v + math.sqrt(2*v)*k + math.pow(k, 2))
         
         return [1, a1, a2]
     
@@ -43,9 +43,9 @@ class SecondLowShelving():
             b1 = (2 * (v*math.pow(k,2) - 1)) / (1 + math.sqrt(2)*k + math.pow(k, 2))
             b2 = (1 - math.sqrt(2*v)*k + v*math.pow(k,2)) / (1 + math.sqrt(2)*k + math.pow(k,2))
         else:
-            b0 = (1 + math.sqrt(2)*k + math.pow(k,2))/(1 + math.sqrt(2*v)*k + v*math.pow(k, 2))
-            b1 = (2*(math.pow(k,2)-1)) / (1 + math.sqrt(2*v)*k + v*math.pow(k, 2))
-            b2 = (1 - math.sqrt(2)*k + math.pow(k,2))/(1 + math.sqrt(2*v)*k + v*math.pow(k, 2))
+            b0 = v*(1 + math.sqrt(2)*k + math.pow(k,2))/(v + math.sqrt(2*v)*k + math.pow(k, 2))
+            b1 = (2*v*(math.pow(k,2)-1)) / (v + math.sqrt(2*v)*k + math.pow(k, 2))
+            b2 = v*(1 - math.sqrt(2)*k + math.pow(k,2))/(v + math.sqrt(2*v)*k + math.pow(k, 2))
         return [b0, b1, b2]
                   
     def get_response(self):
@@ -62,6 +62,7 @@ class SecondLowShelving():
         ax[0].grid(True)
         ax[0].set_title('Second Order Low Shelving Magnitude Response')
         ax[0].set_xlabel('Frequency')
+        ax[0].set_ylim([0, 3])
         
         ax[1].plot(w, np.unwrap(np.angle(h)))
         ax[1].grid(True)
@@ -105,8 +106,8 @@ class SecondHighShelving():
             a1 = 2*(math.pow(k, 2) - 1) / (1 + math.sqrt(2)*k + math.pow(k, 2))
             a2 = (1 - math.sqrt(2)*k + math.pow(k, 2)) / (1 + math.sqrt(2)*k + math.pow(k, 2))
         else:
-            a1 = (2*(math.pow(k, 2)/v - 1))/(1 + math.sqrt(2/v)*k + math.pow(k,2)/v)
-            a2 = (1 - math.sqrt(2/v)*k + math.pow(k,2)/v) / (1 + math.sqrt(2/v)*k + math.pow(k,2)/v)
+            a1 = (2*(v*math.pow(k, 2) - 1))/(1 + math.sqrt(2*v)*k + math.pow(k,2)*v)
+            a2 = (1 - math.sqrt(2*v)*k + math.pow(k,2)*v) / (1 + math.sqrt(2*v)*k + math.pow(k,2)*v)
         return [1, a1, a2]
     
     def get_num(self):
@@ -117,9 +118,9 @@ class SecondHighShelving():
             b1 = (2*(math.pow(k, 2) - v)) / (1 + math.sqrt(2)*k + math.pow(k, 2))
             b2 = (v - math.sqrt(2*v)*k + math.pow(k, 2)) / (1 + math.sqrt(2)*k + math.pow(k, 2))
         else:
-            b0 = (1 + math.sqrt(2)*k + math.pow(k,2))/(v + math.sqrt(2*v)*k + math.pow(k,2))
-            b1 = (2*(math.pow(k, 2) - 1))/(v + np.sqrt(2*v)*k + math.pow(k,2))
-            b2 = (1 - math.sqrt(2)*k + math.pow(k,2))/(v + math.sqrt(2*v)*k + math.pow(k,2))
+            b0 = v*(1 + math.sqrt(2)*k + math.pow(k,2))/(1 + math.sqrt(2*v)*k + v*math.pow(k,2))
+            b1 = (2*v*(math.pow(k, 2) - 1))/(1 + np.sqrt(2*v)*k + v*math.pow(k,2))
+            b2 = v*(1 - math.sqrt(2)*k + math.pow(k,2))/(1 + math.sqrt(2*v)*k + v*math.pow(k,2))
             
         return [b0, b1, b2]
                   
@@ -135,12 +136,12 @@ class SecondHighShelving():
         fig, ax = plt.subplots(nrows=2, sharex=True, figsize=(10, 10))
         ax[0].plot(w, np.abs(h))
         ax[0].grid(True)
-        ax[0].set_title('First Order High Shelving Magnitude Response')
+        ax[0].set_title('Second Order High Shelving Magnitude Response')
         ax[0].set_xlabel('Frequency')
-        
+        ax[0].set_ylim([0, 3])
         ax[1].plot(w, np.unwrap(np.angle(h)))
         ax[1].grid(True)
-        ax[1].set_title('First Order High Shelving Phase Response')
+        ax[1].set_title('Second Order High Shelving Phase Response')
         ax[1].set_xlabel('Frequency')
            
     def apply_effect(self, waveform):
@@ -209,7 +210,7 @@ class SecondPeak():
         ax[0].grid(True)
         ax[0].set_title('Second Order Peak Magnitude Response')
         ax[0].set_xlabel('Frequency')
-        
+        ax[0].set_ylim([0, 3])
         ax[1].plot(w, np.unwrap(np.angle(h)))
         ax[1].grid(True)
         ax[1].set_title('Second Order Peak Phase Response')
