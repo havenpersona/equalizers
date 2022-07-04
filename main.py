@@ -34,29 +34,27 @@ if __name__=="__main__":
     else:
         boost = False
 
-    first_allpass = FirstAllPass(args.fc, args.fs, args.g, boost)
-    first_low = FirstLowShelving(args.fc, args.fs, args.g, boost)
-    first_high = FirstHighShelving(args.fc, args.fs, args.g, boost)
+    first_allpass = FirstAllPass(fc = args.fc, fs = args.fs, g = args.g, order = args.order, f_type = args.f_type, boost = boost)
+    first_low = FirstLowShelving(fc = args.fc, fs = args.fs, g = args.g, order = args.order, f_type = args.f_type, boost = boost)
+    first_high = FirstHighShelving(fc = args.fc, fs = args.fs, g = args.g, order = args.order, f_type = args.f_type, boost = boost)
     #second_allpass = SecondAllPass(args.fc, args.fs, args.fb, args.g, boost)
-    second_low = SecondLowShelving(args.fc, args.fs, args.g, boost)
-    second_high = SecondHighShelving(args.fc, args.fs, args.g, boost)
-    second_peak = SecondPeak(args.fc, args.fs, args.fb, args.g, boost)
+    second_low = SecondLowShelving(fc = args.fc, fs = args.fs, g = args.g, order = args.order, f_type = args.f_type, boost = boost)
+    second_high = SecondHighShelving(fc = args.fc, fs = args.fs, g = args.g, order = args.order, f_type = args.f_type, boost = boost)
+    second_peak = SecondPeak(fc = args.fc, fs = args.fs, fb = args.fb, g = args.g, order = args.order, f_type = args.f_type, boost = boost)
     name = args.path + args.audio_file
     waveform, _ = librosa.load(name, sr = args.fs)
     
     if args.order == 'first':
         if args.f_type == 'allpass':
-            first_allpass.play_audio(waveform)
             first_allpass.plot_response()
         elif args.f_type == 'low':
             first_low.plot_response()
         elif args.f_type == 'high':
             first_high.plot_response()
         else:
-            print("not defined, first order")
+            print("first order, not defined")
     if args.order == 'second':
         if args.f_type == 'allpass':
-            second_allpass.play_audio(waveform)
             second_allpass.plot_response()
         elif args.f_type == 'low':
             second_low.plot_response()
@@ -65,4 +63,4 @@ if __name__=="__main__":
         elif args.f_type == 'peak':
             second_peak.plot_response()
         else:
-            print("not defined, second order anyway")
+            print("second order, not defined")
